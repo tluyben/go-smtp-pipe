@@ -437,11 +437,13 @@ func sendEmail(emailData *EmailData, apiKey string) error {
 		return fmt.Errorf("error sending request: %v", err)
 	}
 	defer resp.Body.Close()
+	body, _ := io.ReadAll(resp.Body)
 
 	if resp.StatusCode != http.StatusOK {
-		body, _ := io.ReadAll(resp.Body)
 		return fmt.Errorf("API request failed with status %d: %s", resp.StatusCode, string(body))
 	}
+
+	log.Println(string(body))
 
 	log.Println("Email sent successfully")
 	return nil
